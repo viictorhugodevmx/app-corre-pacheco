@@ -32,3 +32,17 @@ El arnés se comprueba mediante test:setup.
 - Vista estática antes de introducir el ciclo de animación.
 - Marcador de muestra y botón deshabilitado hasta construir el flujo.
 - Tipografía del sistema, sin solicitudes de fuentes externas.
+
+## Paso 2 — Movimiento
+
+- Física expresada en segundos y coordenadas del escenario lógico.
+- Velocidad inicial: 240 unidades/segundo.
+- Gravedad: 1800 unidades/segundo al cuadrado.
+- Impulso de salto: -660 unidades/segundo.
+- Salto simple: se ignoran solicitudes mientras está en el aire.
+- Motor en ref; React no recibe actualizaciones por cuadro.
+- Delta limitado a 50 ms para evitar avances abruptos.
+- Pestaña oculta suspende avance; pausa completa corresponde al Paso 5.
+- Movimiento reducido desactiva parallax y flotación decorativa.
+- Dibujo estático anterior conservado como referencia.
+- npm run check incluye tests desde este paso.

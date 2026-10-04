@@ -29,7 +29,6 @@ function App() {
               <span>Pacheco.</span>
             </h1>
           </div>
-
           <p className="game-description">
             La motita no espera.
             <br />
@@ -39,7 +38,7 @@ function App() {
           </p>
         </div>
 
-        <section className="game-panel" aria-label="Vista previa del juego">
+        <section className="game-panel" aria-label="Demostración de movimiento">
           <div className="game-toolbar">
             <div className="score-group">
               <ScoreCard label="PUNTOS" value="00000" />
@@ -47,7 +46,7 @@ function App() {
             </div>
             <span className="preview-badge">
               <span aria-hidden="true" />
-              VISTA PREVIA
+              DEMO DE MOVIMIENTO
             </span>
           </div>
 
@@ -65,17 +64,16 @@ function App() {
               ↑
             </span>
             <span className="keycap keycap-wide">ESPACIO</span>
-            <p>Salta obstáculos. Junta hojitas. Supera tu récord.</p>
+            <p>Salta con el teclado o usa el botón SALTAR.</p>
           </div>
-
           <button className="play-button" type="button" disabled>
-            JUGAR · PRÓXIMAMENTE
+            PARTIDA · PRÓXIMAMENTE
           </button>
         </div>
 
         <p className="development-note">
-          Escenario en construcción. Activamos la carrera y el salto en el
-          siguiente paso.
+          Carrera y salto disponibles. Los obstáculos y las partidas llegan en
+          el siguiente paso. El marcador todavía es de muestra.
         </p>
       </section>
 
