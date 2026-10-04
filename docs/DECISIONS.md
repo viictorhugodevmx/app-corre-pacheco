@@ -23,3 +23,12 @@ El arnés se comprueba mediante test:setup.
 - Construir identidad visual y escenario en Paso 1.
 - Definir valores de física y puntuación durante sus pasos.
 - Acordar creación del remoto al llegar a GitHub.
+
+## Paso 1 — Base visual
+
+- Escenario lógico de 960 × 400, conservando proporción al adaptarse.
+- Canvas ajustado según devicePixelRatio para mejorar nitidez.
+- Dibujo separado del componente React.
+- Vista estática antes de introducir el ciclo de animación.
+- Marcador de muestra y botón deshabilitado hasta construir el flujo.
+- Tipografía del sistema, sin solicitudes de fuentes externas.
