@@ -1,0 +1,47 @@
+.setup-screen {
+  display: grid;
+  min-height: 100svh;
+  padding: 24px;
+  place-items: center;
+  background:
+    radial-gradient(ellipse at 20% 15%, #553277 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 85%, #234735 0%, transparent 45%), #160f25;
+}
+
+.setup-card {
+  width: min(100%, 680px);
+  padding: clamp(28px, 6vw, 64px);
+  border: 1px solid #ffffff26;
+  border-radius: 28px;
+  background: #160f25b3;
+  box-shadow: 0 24px 80px #00000040;
+}
+
+.setup-label {
+  margin: 0 0 20px;
+  color: #b9f078;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.setup-card h1 {
+  margin: 0;
+  font-size: clamp(2.8rem, 8vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+
+.setup-description {
+  max-width: 440px;
+  margin: 24px 0;
+  color: #d5c8e4;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.setup-status {
+  margin: 32px 0 0;
+  color: #b9f078;
+  font-weight: 700;
+}
