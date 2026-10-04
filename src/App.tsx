@@ -38,15 +38,15 @@ function App() {
           </p>
         </div>
 
-        <section className="game-panel" aria-label="Demostración de movimiento">
+        <section className="game-panel" aria-label="Juego Corre, Pacheco">
           <div className="game-toolbar">
             <div className="score-group">
-              <ScoreCard label="PUNTOS" value="00000" />
-              <ScoreCard label="RÉCORD" value="—" />
+              <ScoreCard label="PUNTOS · PRONTO" value="—" />
+              <ScoreCard label="RÉCORD · PRONTO" value="—" />
             </div>
             <span className="preview-badge">
               <span aria-hidden="true" />
-              DEMO DE MOVIMIENTO
+              PRIMERA PARTIDA
             </span>
           </div>
 
@@ -66,14 +66,11 @@ function App() {
             <span className="keycap keycap-wide">ESPACIO</span>
             <p>Salta con el teclado o usa el botón SALTAR.</p>
           </div>
-          <button className="play-button" type="button" disabled>
-            PARTIDA · PRÓXIMAMENTE
-          </button>
         </div>
 
         <p className="development-note">
-          Carrera y salto disponibles. Los obstáculos y las partidas llegan en
-          el siguiente paso. El marcador todavía es de muestra.
+          Ya puedes iniciar, esquivar, perder y reintentar. Las hojitas, los
+          puntos y el récord llegan en el siguiente paso.
         </p>
       </section>
 

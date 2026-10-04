@@ -1,14 +1,26 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { SCENE_HEIGHT, SCENE_WIDTH } from '../game/drawScene';
-import { drawRunnerScene } from '../game/drawRunnerScene';
-import { createRunner, jumpRunner, updateRunner } from '../game/runner';
+import { drawGameScene } from '../game/drawGameScene';
+import {
+  createGame,
+  jumpGame,
+  startGame,
+  updateGame,
+  type GameStatus,
+} from '../game/game';
 
 export function useRunnerCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const runnerRef = useRef(createRunner());
+  const gameRef = useRef(createGame());
+  const [status, setStatus] = useState<GameStatus>('ready');
+
+  const start = useCallback(() => {
+    gameRef.current = startGame();
+    setStatus('running');
+  }, []);
 
   const jump = useCallback(() => {
-    runnerRef.current = jumpRunner(runnerRef.current);
+    gameRef.current = jumpGame(gameRef.current);
   }, []);
 
   useEffect(() => {
@@ -17,8 +29,6 @@ export function useRunnerCanvas() {
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-
-    runnerRef.current = createRunner();
 
     let frameId = 0;
     let previousTime: number | null = null;
@@ -40,7 +50,7 @@ export function useRunnerCanvas() {
         0,
       );
 
-      drawRunnerScene(ctx, runnerRef.current, motionPreference.matches);
+      drawGameScene(ctx, gameRef.current, motionPreference.matches);
     }
 
     function resize() {
@@ -54,7 +64,6 @@ export function useRunnerCanvas() {
       canvas.height = Math.round(
         width * (SCENE_HEIGHT / SCENE_WIDTH) * pixelRatio,
       );
-
       draw();
     }
 
@@ -65,8 +74,13 @@ export function useRunnerCanvas() {
         previousTime = null;
       } else {
         if (previousTime !== null) {
+          const before = gameRef.current.status;
           const delta = Math.min((time - previousTime) / 1000, 0.05);
-          runnerRef.current = updateRunner(runnerRef.current, delta);
+          gameRef.current = updateGame(gameRef.current, delta);
+
+          if (gameRef.current.status !== before) {
+            setStatus(gameRef.current.status);
+          }
         }
 
         previousTime = time;
@@ -90,7 +104,11 @@ export function useRunnerCanvas() {
       }
 
       event.preventDefault();
-      if (!event.repeat) jump();
+      if (event.repeat) return;
+
+      if (gameRef.current.status === 'running') {
+        jump();
+      }
     }
 
     function resetClock() {
@@ -117,5 +135,5 @@ export function useRunnerCanvas() {
     };
   }, [jump]);
 
-  return { canvasRef, jump };
+  return { canvasRef, status, start, jump };
 }

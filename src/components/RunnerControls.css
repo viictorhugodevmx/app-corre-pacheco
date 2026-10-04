@@ -1,3 +1,51 @@
+.canvas-stage {
+  position: relative;
+}
+
+.game-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  padding: 16px;
+  background: #160f2555;
+  place-items: center;
+}
+
+.overlay-card {
+  width: min(100%, 420px);
+  padding: clamp(16px, 3vw, 28px);
+  border: 1px solid #ffffff30;
+  border-radius: 18px;
+  background: #201629ed;
+  box-shadow: 0 15px 50px #00000040;
+  text-align: center;
+}
+
+.overlay-eyebrow {
+  margin: 0 0 10px;
+  color: #b9ef70;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.overlay-card h2 {
+  margin: 0;
+  font-size: clamp(1.1rem, 3vw, 1.8rem);
+  line-height: 1.15;
+}
+
+.overlay-card > p:not(.overlay-eyebrow) {
+  margin: 14px 0 20px;
+  color: #d5c8df;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.overlay-card .play-button {
+  cursor: pointer;
+}
+
 .runner-controls {
   display: flex;
   align-items: center;
@@ -30,6 +78,11 @@
   background: #b9ef7030;
 }
 
+.jump-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 @media (max-width: 700px) {
   .runner-controls {
     padding: 12px 14px;
@@ -37,5 +90,33 @@
 
   .runner-controls span {
     font-size: 0.65rem;
+  }
+
+  .game-overlay {
+    padding: 8px;
+  }
+
+  .overlay-card {
+    padding: 10px 12px;
+    border-radius: 12px;
+  }
+
+  .overlay-eyebrow {
+    margin-bottom: 6px;
+    font-size: 0.5rem;
+  }
+
+  .overlay-card h2 {
+    font-size: 1rem;
+  }
+
+  .overlay-card > p:not(.overlay-eyebrow) {
+    display: none;
+  }
+
+  .overlay-card .play-button {
+    min-height: 44px;
+    margin-top: 10px;
+    padding: 10px 16px;
   }
 }

@@ -46,3 +46,14 @@ El arnés se comprueba mediante test:setup.
 - Movimiento reducido desactiva parallax y flotación decorativa.
 - Dibujo estático anterior conservado como referencia.
 - npm run check incluye tests desde este paso.
+
+## Paso 3 — Partidas y obstáculos
+
+- Obstáculos posicionados en coordenadas del mundo.
+- Primera aparición a 1060 unidades; separación entre 460 y 680.
+- Colisión por cajas, excluyendo extremos decorativos del personaje.
+- Contacto exacto entre bordes no cuenta como solapamiento.
+- Motor conserva estado en ref; React recibe cambios de fase.
+- Derrota congela el motor y muestra opción de reintento.
+- Reintentar crea un estado inicial limpio.
+- La separación se revisará junto con la velocidad progresiva en Paso 4.
