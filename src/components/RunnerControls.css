@@ -55,41 +55,62 @@
   border-bottom: 1px solid #ffffff15;
 }
 
-.runner-controls span {
+.runner-controls > span {
   color: #cfc0da;
   font-size: 0.75rem;
   line-height: 1.6;
 }
 
-.jump-button {
+.action-buttons {
+  display: flex;
   flex-shrink: 0;
+  gap: 8px;
+}
+
+.jump-button,
+.pause-button {
   min-height: 44px;
-  padding: 10px 20px;
+  padding: 10px 16px;
   border: 1px solid #b9ef7066;
   border-radius: 9px;
   color: #b9ef70;
   background: #b9ef7012;
+  font-size: 0.75rem;
   font-weight: 800;
   cursor: pointer;
   touch-action: manipulation;
+}
+
+.pause-button {
+  border-color: #ffffff30;
+  color: #d5c8df;
+  background: #ffffff08;
 }
 
 .jump-button:active {
   background: #b9ef7030;
 }
 
-.jump-button:disabled {
+.jump-button:disabled,
+.pause-button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
 @media (max-width: 700px) {
   .runner-controls {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
     padding: 12px 14px;
   }
 
-  .runner-controls span {
+  .runner-controls > span {
     font-size: 0.65rem;
+  }
+
+  .action-buttons > button {
+    flex: 1;
   }
 
   .game-overlay {

@@ -72,3 +72,23 @@ El arnés se comprueba mediante test:setup.
 - Clave local: corre-pacheco.record.v1.
 - Storage inválido/bloqueado no interrumpe el juego.
 - HUD actualizado aproximadamente cada 100 ms y al terminar.
+
+## Incidencia del Paso 4
+
+- Síntoma: ESLint react-hooks/refs rechazó inicialización del HUD.
+- Causa: lectura de gameRef.current durante render.
+- Corrección: inicializar HUD con createGame(), sin leer refs.
+- Validación: Paso 4 cerrado posteriormente por Víctor.
+- Regla conservada: refs leídas/escritas en efectos o eventos.
+
+## Paso 5 — Pausa y efectos
+
+- Session envuelve GameState y controla pausa sin modificar el motor.
+- Pausa congela física, puntos y efectos.
+- Ocultar pestaña pausa; regresar exige reanudar explícitamente.
+- Reinicio del reloj impide aplicar el tiempo detenido.
+- Partículas acotadas a 64, con tiempo de vida.
+- Bonus visible conservado con movimiento reducido.
+- Movimiento reducido omite partículas decorativas.
+- Reacción al perder mediante ojos en cruz.
+- Pausa disponible con P, Escape y botón HTML.

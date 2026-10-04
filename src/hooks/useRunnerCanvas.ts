@@ -1,20 +1,31 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { SCENE_HEIGHT, SCENE_WIDTH } from '../game/drawScene';
 import { drawGameScene } from '../game/drawGameScene';
+import { getScore, getSpeed, LEAF_BONUS } from '../game/game';
 import {
-  createGame,
-  getScore,
-  getSpeed,
-  jumpGame,
-  startGame,
-  updateGame,
-  type GameState,
-} from '../game/game';
+  burst,
+  createEffects,
+  drawEffects,
+  rewardEffects,
+  updateEffects,
+} from '../game/effects';
 import { readRecord, saveRecord } from '../game/record';
+import {
+  createSession,
+  jumpSession,
+  pauseSession,
+  resumeSession,
+  startSession,
+  updateSession,
+  type Session,
+} from '../game/session';
 
-function getHud(game: GameState, record: number) {
+function getHud(session: Session, record: number) {
+  const game = session.game;
+
   return {
     status: game.status,
+    paused: session.paused,
     score: getScore(game),
     leaves: game.collectedLeaves,
     speed: Math.round(getSpeed(game.runner.distance)),
@@ -24,17 +35,37 @@ function getHud(game: GameState, record: number) {
 
 export function useRunnerCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const gameRef = useRef(createGame());
-  const [hud, setHud] = useState(() => getHud(createGame(), readRecord()));
+  const sessionRef = useRef(createSession());
+  const effectsRef = useRef(createEffects());
+  const resetClockRef = useRef(true);
+  const [hud, setHud] = useState(() => getHud(createSession(), readRecord()));
   const recordRef = useRef(hud.record);
 
   const start = useCallback(() => {
-    gameRef.current = startGame();
-    setHud(getHud(gameRef.current, recordRef.current));
+    sessionRef.current = startSession();
+    effectsRef.current = createEffects();
+    resetClockRef.current = true;
+    setHud(getHud(sessionRef.current, recordRef.current));
+  }, []);
+
+  const togglePause = useCallback(() => {
+    const session = sessionRef.current;
+    sessionRef.current = session.paused
+      ? resumeSession(session)
+      : pauseSession(session);
+
+    resetClockRef.current = true;
+    setHud(getHud(sessionRef.current, recordRef.current));
   }, []);
 
   const jump = useCallback(() => {
-    gameRef.current = jumpGame(gameRef.current);
+    const before = sessionRef.current;
+    const next = jumpSession(before);
+    sessionRef.current = next;
+
+    if (before.game.runner.grounded && !next.game.runner.grounded) {
+      effectsRef.current = burst(effectsRef.current, 190, 320, '#f8d17e');
+    }
   }, []);
 
   useEffect(() => {
@@ -65,7 +96,9 @@ export function useRunnerCanvas() {
         0,
       );
 
-      drawGameScene(ctx, gameRef.current, motionPreference.matches);
+      const game = sessionRef.current.game;
+      drawGameScene(ctx, game, motionPreference.matches);
+      drawEffects(ctx, effectsRef.current, game, motionPreference.matches);
     }
 
     function resize() {
@@ -79,27 +112,66 @@ export function useRunnerCanvas() {
       canvas.height = Math.round(
         width * (SCENE_HEIGHT / SCENE_WIDTH) * pixelRatio,
       );
-
       draw();
     }
 
     function frame(time: number) {
       if (disposed) return;
 
+      if (resetClockRef.current) {
+        previousTime = null;
+        resetClockRef.current = false;
+      }
+
       if (document.hidden) {
         previousTime = null;
       } else {
-        const before = gameRef.current.status;
+        const before = sessionRef.current;
+        const delta =
+          previousTime === null
+            ? 0
+            : Math.min((time - previousTime) / 1000, 0.05);
 
-        if (previousTime !== null) {
-          const delta = Math.min((time - previousTime) / 1000, 0.05);
-          gameRef.current = updateGame(gameRef.current, delta);
+        sessionRef.current = updateSession(before, delta);
+
+        const session = sessionRef.current;
+        const game = session.game;
+
+        if (!session.paused) {
+          effectsRef.current = updateEffects(effectsRef.current, delta);
         }
 
-        const game = gameRef.current;
-        const ended = before === 'running' && game.status === 'gameover';
+        const ended =
+          before.game.status === 'running' && game.status === 'gameover';
+
+        const landed =
+          !before.game.runner.grounded &&
+          game.runner.grounded &&
+          game.status === 'running';
+
+        if (landed) {
+          effectsRef.current = burst(effectsRef.current, 190, 320, '#b7a9c4');
+        }
+
+        const collected = game.collectedLeaves - before.game.collectedLeaves;
+
+        if (collected > 0) {
+          effectsRef.current = rewardEffects(
+            effectsRef.current,
+            220,
+            320 + game.runner.playerY - 100,
+            collected * LEAF_BONUS,
+          );
+        }
 
         if (ended) {
+          effectsRef.current = burst(
+            effectsRef.current,
+            190,
+            320 + game.runner.playerY - 80,
+            '#f58365',
+          );
+
           const score = getScore(game);
 
           if (score > recordRef.current) {
@@ -110,9 +182,11 @@ export function useRunnerCanvas() {
 
         if (
           ended ||
-          (game.status === 'running' && time - lastPublished >= 100)
+          (game.status === 'running' &&
+            !session.paused &&
+            time - lastPublished >= 100)
         ) {
-          setHud(getHud(game, recordRef.current));
+          setHud(getHud(session, recordRef.current));
           lastPublished = time;
         }
 
@@ -124,36 +198,49 @@ export function useRunnerCanvas() {
     }
 
     function onKeyDown(event: KeyboardEvent) {
-      if (event.code !== 'Space' && event.code !== 'ArrowUp') return;
       if (event.altKey || event.ctrlKey || event.metaKey) return;
 
       const target = event.target;
-
-      if (
+      const editable =
         target instanceof HTMLElement &&
-        (target.isContentEditable ||
-          target.closest('input, textarea, select, button, a'))
-      ) {
+        (target.isContentEditable || target.closest('input, textarea, select'));
+
+      if (editable) return;
+
+      if (event.code === 'KeyP' || event.code === 'Escape') {
+        if (sessionRef.current.game.status === 'running') {
+          event.preventDefault();
+          if (!event.repeat) togglePause();
+        }
+        return;
+      }
+
+      if (event.code !== 'Space' && event.code !== 'ArrowUp') return;
+
+      if (target instanceof HTMLElement && target.closest('button, a')) {
         return;
       }
 
       event.preventDefault();
 
-      if (!event.repeat && gameRef.current.status === 'running') {
-        jump();
-      }
+      if (!event.repeat) jump();
     }
 
-    function resetClock() {
+    function onVisibilityChange() {
       previousTime = null;
+      resetClockRef.current = true;
+
+      if (document.hidden) {
+        sessionRef.current = pauseSession(sessionRef.current);
+        setHud(getHud(sessionRef.current, recordRef.current));
+      }
     }
 
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
-
     window.addEventListener('resize', resize);
     window.addEventListener('keydown', onKeyDown);
-    document.addEventListener('visibilitychange', resetClock);
+    document.addEventListener('visibilitychange', onVisibilityChange);
 
     resize();
     frameId = window.requestAnimationFrame(frame);
@@ -164,9 +251,9 @@ export function useRunnerCanvas() {
       observer.disconnect();
       window.removeEventListener('resize', resize);
       window.removeEventListener('keydown', onKeyDown);
-      document.removeEventListener('visibilitychange', resetClock);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
     };
-  }, [jump]);
+  }, [jump, togglePause]);
 
-  return { canvasRef, hud, start, jump };
+  return { canvasRef, hud, start, jump, togglePause };
 }

@@ -2,27 +2,29 @@
 
 - Modo: Lab.
 - Blueprint: v0.1.
-- Último paso cerrado por Víctor: 3 — Obstáculos y fin de partida.
+- Último paso cerrado por Víctor: 4 — Hojitas, puntos y dificultad.
 - Evidencia del cierre anterior: VoBo explícito en conversación.
-- Paso actual: 4 — Hojitas, puntos y dificultad.
+- Paso actual: 5 — Pausa y acabado visual.
 - Estado: pendiente de validación.
 
 ## Implementación de esta entrega
 
-- Hojitas coleccionables, eliminadas tras recogerlas.
-- Puntos por distancia y bonus por hojita.
-- Velocidad progresiva con máximo.
-- Marcador React actualizado aproximadamente a 10 Hz.
-- Resultado con puntos y hojitas.
-- Récord local y conservación en memoria si storage falla.
-- Tests de puntuación, colección, dificultad y almacenamiento.
+- Pausa manual con botón, P y Escape.
+- Pausa automática al ocultar pestaña y reanudación explícita.
+- Reloj reiniciado al comenzar, pausar y reanudar.
+- Partículas al saltar, aterrizar, recoger y perder.
+- Bonus visible al recoger hojitas.
+- Reacción del personaje al perder.
+- Partículas limitadas y eliminadas al expirar.
+- Controles adaptados a escritorio y móvil.
+- Tests de pausa, reanudación y vida de efectos.
 
 ## Validación
 
-Pendiente de ejecución y recorrido funcional por Víctor.
-Pausa completa, partículas y feedback visual del bonus pendientes del Paso 5.
+Pendiente de checks y pruebas funcionales/visuales por Víctor.
+No se declara verificada la pausa automática hasta probarla en navegador.
 
 ## Siguiente acción
 
-Probar colección, incremento de puntos, récord, reinicio y velocidad.
-Tras VoBo, iniciar Paso 5 — Pausa y acabado visual.
+Revisar pausa, efectos, teclado, móvil y movimiento reducido.
+Tras VoBo, iniciar Paso 6 — Verificación integral y GitHub.
