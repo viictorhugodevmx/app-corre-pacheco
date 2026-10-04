@@ -8,6 +8,38 @@ export function drawGameScene(
 ) {
   drawRunnerScene(ctx, game.runner, reducedMotion);
 
+  for (const leaf of game.leaves) {
+    const x = leaf.worldX - game.runner.distance;
+    if (x < -30 || x > 990) continue;
+
+    ctx.save();
+    ctx.translate(x, leaf.y);
+
+    ctx.fillStyle = '#b9ef701c';
+    ctx.beginPath();
+    ctx.arc(0, 0, 24, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#b9ef70';
+    ctx.beginPath();
+    ctx.moveTo(0, -15);
+    ctx.bezierCurveTo(19, -9, 16, 10, 0, 15);
+    ctx.bezierCurveTo(-16, 10, -19, -9, 0, -15);
+    ctx.fill();
+
+    ctx.strokeStyle = '#416c35';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, 12);
+    ctx.lineTo(0, -8);
+    ctx.moveTo(0, 4);
+    ctx.lineTo(7, -2);
+    ctx.moveTo(0, 0);
+    ctx.lineTo(-7, -5);
+    ctx.stroke();
+    ctx.restore();
+  }
+
   for (const obstacle of game.obstacles) {
     const bounds = obstacleBounds(obstacle, game.runner.distance);
     if (bounds.x > 980 || bounds.x + bounds.width < 0) continue;

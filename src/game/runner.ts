@@ -33,13 +33,14 @@ export function jumpRunner(state: RunnerState): RunnerState {
 export function updateRunner(
   state: RunnerState,
   deltaSeconds: number,
+  speed = RUN_SPEED,
 ): RunnerState {
   if (!Number.isFinite(deltaSeconds) || deltaSeconds <= 0) return state;
 
   const next = {
     ...state,
     elapsed: state.elapsed + deltaSeconds,
-    distance: state.distance + RUN_SPEED * deltaSeconds,
+    distance: state.distance + speed * deltaSeconds,
   };
 
   if (state.grounded) return next;

@@ -3,20 +3,34 @@ import { SCENE_HEIGHT, SCENE_WIDTH } from '../game/drawScene';
 import { drawGameScene } from '../game/drawGameScene';
 import {
   createGame,
+  getScore,
+  getSpeed,
   jumpGame,
   startGame,
   updateGame,
-  type GameStatus,
+  type GameState,
 } from '../game/game';
+import { readRecord, saveRecord } from '../game/record';
+
+function getHud(game: GameState, record: number) {
+  return {
+    status: game.status,
+    score: getScore(game),
+    leaves: game.collectedLeaves,
+    speed: Math.round(getSpeed(game.runner.distance)),
+    record,
+  };
+}
 
 export function useRunnerCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gameRef = useRef(createGame());
-  const [status, setStatus] = useState<GameStatus>('ready');
+  const [hud, setHud] = useState(() => getHud(createGame(), readRecord()));
+  const recordRef = useRef(hud.record);
 
   const start = useCallback(() => {
     gameRef.current = startGame();
-    setStatus('running');
+    setHud(getHud(gameRef.current, recordRef.current));
   }, []);
 
   const jump = useCallback(() => {
@@ -32,6 +46,7 @@ export function useRunnerCanvas() {
 
     let frameId = 0;
     let previousTime: number | null = null;
+    let lastPublished = 0;
     let disposed = false;
 
     const motionPreference = window.matchMedia(
@@ -64,6 +79,7 @@ export function useRunnerCanvas() {
       canvas.height = Math.round(
         width * (SCENE_HEIGHT / SCENE_WIDTH) * pixelRatio,
       );
+
       draw();
     }
 
@@ -73,14 +89,31 @@ export function useRunnerCanvas() {
       if (document.hidden) {
         previousTime = null;
       } else {
+        const before = gameRef.current.status;
+
         if (previousTime !== null) {
-          const before = gameRef.current.status;
           const delta = Math.min((time - previousTime) / 1000, 0.05);
           gameRef.current = updateGame(gameRef.current, delta);
+        }
 
-          if (gameRef.current.status !== before) {
-            setStatus(gameRef.current.status);
+        const game = gameRef.current;
+        const ended = before === 'running' && game.status === 'gameover';
+
+        if (ended) {
+          const score = getScore(game);
+
+          if (score > recordRef.current) {
+            recordRef.current = score;
+            saveRecord(score);
           }
+        }
+
+        if (
+          ended ||
+          (game.status === 'running' && time - lastPublished >= 100)
+        ) {
+          setHud(getHud(game, recordRef.current));
+          lastPublished = time;
         }
 
         previousTime = time;
@@ -95,6 +128,7 @@ export function useRunnerCanvas() {
       if (event.altKey || event.ctrlKey || event.metaKey) return;
 
       const target = event.target;
+
       if (
         target instanceof HTMLElement &&
         (target.isContentEditable ||
@@ -104,9 +138,8 @@ export function useRunnerCanvas() {
       }
 
       event.preventDefault();
-      if (event.repeat) return;
 
-      if (gameRef.current.status === 'running') {
+      if (!event.repeat && gameRef.current.status === 'running') {
         jump();
       }
     }
@@ -135,5 +168,5 @@ export function useRunnerCanvas() {
     };
   }, [jump]);
 
-  return { canvasRef, status, start, jump };
+  return { canvasRef, hud, start, jump };
 }

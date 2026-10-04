@@ -1,0 +1,49 @@
+.progress-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 24px;
+  border-bottom: 1px solid #ffffff15;
+  color: #b7a9c4;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+}
+
+.progress-strip strong {
+  margin-left: 6px;
+  color: #b9ef70;
+  font-variant-numeric: tabular-nums;
+}
+
+.result-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 18px 0;
+  font-size: 0.9rem;
+}
+
+.result-stats strong {
+  color: #b9ef70;
+}
+
+.result-stats span {
+  color: #d5c8df;
+}
+
+@media (max-width: 700px) {
+  .progress-strip {
+    padding: 10px 14px;
+    font-size: 0.5rem;
+    gap: 6px;
+  }
+
+  .result-stats {
+    margin: 7px 0 0;
+    gap: 12px;
+    font-size: 0.7rem;
+  }
+}

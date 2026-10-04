@@ -57,3 +57,18 @@ El arnés se comprueba mediante test:setup.
 - Derrota congela el motor y muestra opción de reintento.
 - Reintentar crea un estado inicial limpio.
 - La separación se revisará junto con la velocidad progresiva en Paso 4.
+
+## Paso 4 — Progresión
+
+- Un punto por cada 10 unidades recorridas; 50 por hojita.
+- Velocidad: 240 + distancia/25, limitada a 360.
+- Separación mínima de obstáculos: 460.
+- Test comprueba margen de separación a velocidad máxima.
+- Hojita a 130 unidades antes del obstáculo, altura 150.
+- Coleccionables opcionales; no recogerlos no penaliza.
+- Una hojita se elimina tras recogerse y no puede contar dos veces.
+- Una colisión no concede coleccionables en ese cuadro.
+- Récord se actualiza al terminar la partida.
+- Clave local: corre-pacheco.record.v1.
+- Storage inválido/bloqueado no interrumpe el juego.
+- HUD actualizado aproximadamente cada 100 ms y al terminar.

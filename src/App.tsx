@@ -1,5 +1,4 @@
 import { GameCanvas } from './components/GameCanvas';
-import { ScoreCard } from './components/ScoreCard';
 import './App.css';
 
 function App() {
@@ -39,19 +38,7 @@ function App() {
         </div>
 
         <section className="game-panel" aria-label="Juego Corre, Pacheco">
-          <div className="game-toolbar">
-            <div className="score-group">
-              <ScoreCard label="PUNTOS · PRONTO" value="—" />
-              <ScoreCard label="RÉCORD · PRONTO" value="—" />
-            </div>
-            <span className="preview-badge">
-              <span aria-hidden="true" />
-              PRIMERA PARTIDA
-            </span>
-          </div>
-
           <GameCanvas />
-
           <div className="game-bottom">
             <p>Una misión sencilla: seguir corriendo.</p>
             <span className="scene-tag">BARRIO ATARDECER / 001</span>
@@ -64,13 +51,13 @@ function App() {
               ↑
             </span>
             <span className="keycap keycap-wide">ESPACIO</span>
-            <p>Salta con el teclado o usa el botón SALTAR.</p>
+            <p>Salta obstáculos. Junta hojitas. Supera tu récord.</p>
           </div>
         </div>
 
         <p className="development-note">
-          Ya puedes iniciar, esquivar, perder y reintentar. Las hojitas, los
-          puntos y el récord llegan en el siguiente paso.
+          Las hojitas suman 50 puntos. La velocidad aumenta conforme avanzas. Tu
+          récord se guarda en este navegador.
         </p>
       </section>
 

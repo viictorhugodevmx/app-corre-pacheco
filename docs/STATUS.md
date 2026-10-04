@@ -2,27 +2,27 @@
 
 - Modo: Lab.
 - Blueprint: v0.1.
-- Último paso cerrado por Víctor: 2 — Carrera y salto.
+- Último paso cerrado por Víctor: 3 — Obstáculos y fin de partida.
 - Evidencia del cierre anterior: VoBo explícito en conversación.
-- Paso actual: 3 — Obstáculos y fin de partida.
+- Paso actual: 4 — Hojitas, puntos y dificultad.
 - Estado: pendiente de validación.
 
 ## Implementación de esta entrega
 
-- Estados ready, running y gameover.
-- Cigarros y ceniceros con generación y separación limitada.
-- Colisiones mediante cajas del cuerpo y obstáculos.
-- Pantallas de inicio y derrota.
-- Reinicio limpio y controles habilitados según estado.
-- Tests de colisiones, generación, estados y reinicio.
+- Hojitas coleccionables, eliminadas tras recogerlas.
+- Puntos por distancia y bonus por hojita.
+- Velocidad progresiva con máximo.
+- Marcador React actualizado aproximadamente a 10 Hz.
+- Resultado con puntos y hojitas.
+- Récord local y conservación en memoria si storage falla.
+- Tests de puntuación, colección, dificultad y almacenamiento.
 
 ## Validación
 
-Pendiente de checks y recorrido funcional por Víctor.
-Puntuación, hojitas, dificultad progresiva y récord pendientes del Paso 4.
-Pausa completa pendiente del Paso 5.
+Pendiente de ejecución y recorrido funcional por Víctor.
+Pausa completa, partículas y feedback visual del bonus pendientes del Paso 5.
 
 ## Siguiente acción
 
-Probar iniciar, esquivar ambos obstáculos, perder y reintentar.
-Tras VoBo, iniciar Paso 4 — Hojitas, puntos y dificultad.
+Probar colección, incremento de puntos, récord, reinicio y velocidad.
+Tras VoBo, iniciar Paso 5 — Pausa y acabado visual.

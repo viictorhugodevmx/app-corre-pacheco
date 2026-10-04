@@ -1,12 +1,31 @@
 import { SCENE_HEIGHT, SCENE_WIDTH } from '../game/drawScene';
 import { useRunnerCanvas } from '../hooks/useRunnerCanvas';
+import { ScoreCard } from './ScoreCard';
 import './RunnerControls.css';
+import './GameProgress.css';
 
 export function GameCanvas() {
-  const { canvasRef, status, start, jump } = useRunnerCanvas();
+  const { canvasRef, hud, start, jump } = useRunnerCanvas();
 
   return (
     <>
+      <div className="game-toolbar">
+        <div className="score-group">
+          <ScoreCard
+            label="PUNTOS"
+            value={String(hud.score).padStart(5, '0')}
+          />
+          <ScoreCard
+            label="RÉCORD"
+            value={String(hud.record).padStart(5, '0')}
+          />
+        </div>
+        <span className="preview-badge">
+          <span aria-hidden="true" />
+          {hud.status === 'running' ? 'EN CARRERA' : 'LISTO PARA OTRA'}
+        </span>
+      </div>
+
       <div className="canvas-stage">
         <canvas
           ref={canvasRef}
@@ -14,29 +33,34 @@ export function GameCanvas() {
           width={SCENE_WIDTH}
           height={SCENE_HEIGHT}
           role="img"
-          aria-label="Pacheco corre y salta para esquivar cigarros y ceniceros."
+          aria-label="Pacheco salta para recoger hojitas y esquivar cigarros y ceniceros."
         >
           Juego de carrera y salto de Corre, Pacheco.
         </canvas>
 
-        {status !== 'running' && (
+        {hud.status !== 'running' && (
           <div className="game-overlay">
             <div className="overlay-card">
               <p className="overlay-eyebrow">
-                {status === 'ready'
+                {hud.status === 'ready'
                   ? 'EL BARRIO TE ESPERA'
                   : 'SE ACABÓ EL VIAJE'}
               </p>
               <h2>
-                {status === 'ready'
+                {hud.status === 'ready'
                   ? '¿Nos echamos una carrera?'
-                  : 'Te ganó el tabaco.'}
+                  : 'Buen intento.'}
               </h2>
-              <p>
-                {status === 'ready'
-                  ? 'Salta cigarros y ceniceros. Mantén el camino libre.'
-                  : 'Respira, calcula el salto y vuelve a intentarlo.'}
-              </p>
+
+              {hud.status === 'ready' ? (
+                <p>Junta hojitas, esquiva el tabaco y supera tu récord.</p>
+              ) : (
+                <div className="result-stats">
+                  <strong>{hud.score} puntos</strong>
+                  <span>{hud.leaves} hojitas</span>
+                </div>
+              )}
+
               <button
                 className="play-button"
                 type="button"
@@ -45,26 +69,36 @@ export function GameCanvas() {
                   event.currentTarget.blur();
                 }}
               >
-                {status === 'ready' ? 'A CORRER →' : 'OTRA VUELTA →'}
+                {hud.status === 'ready' ? 'A CORRER →' : 'OTRA VUELTA →'}
               </button>
             </div>
           </div>
         )}
       </div>
 
+      <div className="progress-strip">
+        <span>
+          HOJITAS <strong>{hud.leaves}</strong>
+        </span>
+        <span>
+          RITMO <strong>{hud.speed}</strong>
+        </span>
+        <span>+50 POR HOJITA</span>
+      </div>
+
       <div className="runner-controls">
         <span role="status">
-          {status === 'running'
-            ? 'Espacio, ↑ o SALTAR. Una sola oportunidad por salto.'
-            : status === 'ready'
-              ? 'Todo listo. Empieza cuando quieras.'
-              : 'Partida terminada. Puedes dar otra vuelta.'}
+          {hud.status === 'running'
+            ? 'Calcula el salto. Cada hojita suma 50 puntos.'
+            : hud.status === 'ready'
+              ? 'Tu récord te espera. Empieza cuando quieras.'
+              : `Terminaste con ${hud.score} puntos y ${hud.leaves} hojitas.`}
         </span>
         <button
           className="jump-button"
           type="button"
           onClick={jump}
-          disabled={status !== 'running'}
+          disabled={hud.status !== 'running'}
         >
           SALTAR ↑
         </button>
