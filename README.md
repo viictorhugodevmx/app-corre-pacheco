@@ -7,8 +7,10 @@ cigarros y ceniceros en un barrio al atardecer.
 
 ## Estado
 
-Versión 0.1 en verificación previa a publicación.
-La demo pública en Netlify corresponde a la siguiente etapa.
+Versión 0.1 publicada. Validación funcional reportada por Víctor.
+
+- [Jugar la demo](https://corre-pacheco.netlify.app/)
+- [Repositorio](https://github.com/viictorhugodevmx/app-corre-pacheco)
 
 ## Funcionalidades
 

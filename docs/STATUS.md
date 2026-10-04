@@ -2,31 +2,25 @@
 
 - Modo: Lab.
 - Blueprint: v0.1.
-- Último paso cerrado por Víctor: 5 — Pausa y acabado visual.
-- Evidencia del cierre anterior: VoBo explícito en conversación.
-- Paso actual: 6 — Verificación integral y GitHub.
-- Estado: en curso.
+- Último paso cerrado por Víctor: 6 — Verificación integral y GitHub.
+- Paso actual: 7 — Netlify y cierre.
+- Estado: pendiente de VoBo final.
 
-## Avance confirmado por Víctor
+## Entrega
 
-Pasos 0 a 5 cerrados mediante VoBo.
-Recorrido implementado: inicio, salto, obstáculos, colección,
-puntuación, récord, pausa, derrota y reintento.
+- Demo: https://corre-pacheco.netlify.app/
+- Repositorio: https://github.com/viictorhugodevmx/app-corre-pacheco
+- Enlaces registrados en README.md y docs/RELEASE.md.
+- Publicación estática desde dist.
+- Node 22.19.0 fijado mediante .nvmrc y netlify.toml.
+- Netlify ejecuta checks y build antes de publicar.
 
-## Validación de esta etapa
+## Validación
 
-Pendientes:
-
-- Instalación limpia con npm ci.
-- Formato, lint, tipos, tests y build.
-- Recorrido del build servido con preview.
-- Revisión de escritorio y tamaño móvil.
-- Commit y push a GitHub.
-
-## Entrega pendiente
-
-Demo pública en Netlify y cierre final: Paso 7.
+Demo pública comprobada por Víctor antes de ejecutar este registro.
+No se declara cerrada la APP hasta recibir su VoBo final.
 
 ## Siguiente acción
 
-Ejecutar auditoría reproducible, probar producción local y publicar repo.
+Confirmar última publicación tras el push de documentación.
+Recibir cierre del Paso 7 y cerrar v0.1.
